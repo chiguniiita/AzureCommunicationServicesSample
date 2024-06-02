@@ -13,6 +13,7 @@ namespace AzureCommunicationServicesSample
         private readonly AzureCommunicationServiceSmtpSettings _azureCommunicationServiceSmtpSettings;
         private readonly AzureCommunicationServiceSettings _azureCommunicationServiceSettings;
         private readonly ExecuteSettings _executeSettings;
+        private readonly SmtpClient _smtpClient;
         private readonly string subject = "Hello, world!";
         private readonly string body = "This message is sent from Azure Communication Service Email.";
 
@@ -20,31 +21,24 @@ namespace AzureCommunicationServicesSample
             , IOptions<AzureCommunicationServiceSmtpSettings> azureCommunicationServiceSmtpSettings
             , IOptions<AzureCommunicationServiceSettings> azureCommunicationServiceSettings
             , IOptions<ExecuteSettings> executeSettings
+            , SmtpClient smtpClient
             )
         {
             _configuration = configuration;
             _azureCommunicationServiceSmtpSettings = azureCommunicationServiceSmtpSettings.Value;
             _azureCommunicationServiceSettings = azureCommunicationServiceSettings.Value;
             _executeSettings = executeSettings.Value;
+            _smtpClient = smtpClient;
         }
 
         public void SendEmailUsingSmtp()
         {
-            string smtpHostUrl = "smtp.azurecomm.net";
             var messageSuffix = $"(using {typeof(SmtpClient).FullName})";
-
-            var client = new SmtpClient(smtpHostUrl)
-            {
-                Port = 587,
-                Credentials = new NetworkCredential(_azureCommunicationServiceSmtpSettings.Username, _azureCommunicationServiceSmtpSettings.Password),
-                EnableSsl = true
-            };
-
             var message = new MailMessage(_executeSettings.SenderAddress, _executeSettings.RecipientAddress, subject, body + messageSuffix);
 
             try
             {
-                client.Send(message);
+                _smtpClient.Send(message);
                 Console.WriteLine("Successfully!" + messageSuffix);
             }
             catch (Exception ex)
