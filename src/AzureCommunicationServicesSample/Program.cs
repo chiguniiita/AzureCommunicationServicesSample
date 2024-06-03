@@ -62,7 +62,7 @@ namespace AzureCommunicationServicesSample
                         var client = new SmtpClient(configuration["AzureCommunicationServiceSmtpSettings:SmtpHostUrl"])
                         {
                             Port = 587,
-                            Credentials = new NetworkCredential(configuration["UserName"], configuration["Password"]),
+                            Credentials = new NetworkCredential(configuration["AzureCommunicationServiceSmtpSettings:UserName"], configuration["AzureCommunicationServiceSmtpSettings:Password"]),
                             EnableSsl = true
                         };
                         return client;
@@ -74,8 +74,8 @@ namespace AzureCommunicationServicesSample
                        (isDevelopment ? new ClientSecretCredential(configuration["AZURE_TENANT_ID"], configuration["AZURE_CLIENT_ID"], configuration["AZURE_CLIENT_SECRET"]) : new DefaultAzureCredential())
                        );
 
-                    configuration["AzureCommunicationServiceSettings:ConnectionString"] = secretClient.GetSecret("communicationservices-connectionstring").Value.Value;
-                    configuration["AzureCommunicationServiceSmtpSettings:Password"] = secretClient.GetSecret("communicationservices-smtp-password").Value.Value;
+                    //configuration["AzureCommunicationServiceSettings:ConnectionString"] = secretClient.GetSecret("communicationservices-connectionstring").Value.Value;
+                    //configuration["AzureCommunicationServiceSmtpSettings:Password"] = secretClient.GetSecret("communicationservices-smtp-password").Value.Value;
                 })
                 .UseConsoleLifetime();
         }
