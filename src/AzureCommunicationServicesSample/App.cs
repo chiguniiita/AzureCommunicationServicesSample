@@ -2,7 +2,6 @@
 using Azure.Communication.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using System.Net;
 using System.Net.Mail;
 
 namespace AzureCommunicationServicesSample
